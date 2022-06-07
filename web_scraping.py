@@ -1,8 +1,12 @@
 from bs4 import BeautifulSoup
+import requests
 
-with open("index.html", "r") as f:
-    doc = BeautifulSoup(f, "html.parser")
+url = "https://www.newegg.com/asus-geforce-rtx-3070-ti-tuf-rtx3070ti-o8g-gaming/p/N82E16814126512"
 
-tags = doc.find_all("p")[0]
+result = requests.get(url)
+doc = BeautifulSoup(result.text, "html.parser")
 
-print(tags.find_all("b"))
+prices = doc.find_all(text="$")
+parent = prices[0].parent
+strong = parent.find("strong")
+print(strong.string)
